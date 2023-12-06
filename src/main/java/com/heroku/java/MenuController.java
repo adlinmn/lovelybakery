@@ -303,7 +303,7 @@ public String removeCartItem(@RequestParam("menuId") String menuId, HttpSession 
 }
 
 
-@PostMapping("/makePayment")
+@PostMapping("/custPayment")
 public String makePayment(HttpSession session, Model model) {
     // Retrieve cart items from the session
     ArrayList<Menu> cartItems = (ArrayList<Menu>) session.getAttribute("cartItems");
@@ -332,6 +332,7 @@ public String makePayment(HttpSession session, Model model) {
     // Return the view name for custPayment.html
     return "custPayment";
 }
+
 
 
 }
