@@ -303,4 +303,35 @@ public String removeCartItem(@RequestParam("menuId") String menuId, HttpSession 
 }
 
 
+@PostMapping("/makePayment")
+public String makePayment(HttpSession session, Model model) {
+    // Retrieve cart items from the session
+    ArrayList<Menu> cartItems = (ArrayList<Menu>) session.getAttribute("cartItems");
+
+    if (cartItems == null || cartItems.isEmpty()) {
+        // Handle the case where the cart is empty (no items selected)
+        // You might want to redirect the user to the cart view or show an error message
+        return "redirect:/custViewCart";
+    }
+
+    // Calculate the total price of selected menu items
+    float totalPrice = 0;
+    for (Menu cartItem : cartItems) {
+        totalPrice += cartItem.getPrice();
+    }
+
+    // Pass the cart items and total price to the view
+    model.addAttribute("cartItems", cartItems);
+    model.addAttribute("totalPrice", totalPrice);
+
+    // You can perform additional payment processing logic here if needed
+
+    // Clear the cartItems from the session after successful payment
+    session.removeAttribute("cartItems");
+
+    // Return the view name for custPayment.html
+    return "custPayment";
+}
+
+
 }
