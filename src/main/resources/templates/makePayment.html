@@ -87,7 +87,7 @@
       margin-top: 20px;
     }
     .cancel-button,
-    .make-payment-button {
+    .create-order-button {
       background-color: #ff0000;
       color: #fff;
       border: none;
@@ -222,7 +222,7 @@ margin: 10px;
 
   <div class="action-buttons">
     <button class="cancel-button" onclick="cancelOrder()">Cancel Order</button>
-    <button class="make-payment-button" onclick="makePayment()">Make Payment</button>
+    <button class="create-order-button" onclick="createOrder()">Create Order</button>
   </div>
 </div>
 
@@ -262,7 +262,7 @@ margin: 10px;
     window.location.href = '/custViewCart'; // Update the page URL
   }
 
-  function makePayment() {
+  function createOrder() {
     // Your payment logic goes here
     console.log('Payment made');
     window.location.href = '/custViewOrder'; // Update the page URL

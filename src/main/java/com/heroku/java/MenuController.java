@@ -7,15 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.UUID;
 
 @Controller
 public class MenuController {
@@ -323,7 +326,7 @@ public String makePayment(HttpSession session, Model model) {
     // Pass the cart items and total price to the view
     model.addAttribute("cartItems", cartItems);
     model.addAttribute("totalPrice", totalPrice);
-
+    
     // You can perform additional payment processing logic here if needed
 
     // Clear the cartItems from the session after successful payment
@@ -332,6 +335,7 @@ public String makePayment(HttpSession session, Model model) {
     // Return the view name for makePayment.html
     return "makePayment";
 }
+
 
 
 }
