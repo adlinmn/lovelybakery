@@ -4,6 +4,48 @@
     <title>User Login</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <script>
+      function showLoginStatus(isSuccessful) {
+        var message = isSuccessful ? "Login Successful!" : "Login Failed. Please check your credentials.";
+        var popupContainer = document.createElement("div");
+        popupContainer.className = "popup-container";
+  
+        var popupMessage = document.createElement("div");
+        popupMessage.className = "popup-message";
+        popupMessage.innerText = message;
+  
+        var popupButtons = document.createElement("div");
+        popupButtons.className = "popup-buttons";
+  
+        var closeButton = document.createElement("button");
+        closeButton.innerText = "Close";
+        closeButton.addEventListener("click", function () {
+          document.body.removeChild(popupContainer);
+        });
+  
+        popupButtons.appendChild(closeButton);
+  
+        popupContainer.appendChild(popupMessage);
+        popupContainer.appendChild(popupButtons);
+  
+        document.body.appendChild(popupContainer);
+      }
+
+      function loginUser() {
+      // Simulating a failed login for demonstration purposes
+      var name = document.getElementById("name").value;
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+
+      if (username === "demo" && password === "demo123") {
+        showLoginStatus(true); // Login successful
+      } else {
+        showLoginStatus(false); // Login failed
+      }
+
+      return false; // Prevent the form from actually submitting
+    }
+    </script>
   </head>
   <style>
     header .nav-container {
@@ -312,7 +354,7 @@
       </div>
     </header>
     <div class="container">
-      <form th:action="@{/userlogin}" method="post">
+      <form th:action="@{/userlogin}" method="post" onsubmit="showLoginStatus(true)">
         <div class="profile-icon">
           <i class="fas fa-user"></i>
         </div>

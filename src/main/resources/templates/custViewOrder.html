@@ -151,8 +151,8 @@
       <div class="nav-items">
         <nav>
           <ul>
-            <li><a th:href="@{/customerHomePage}">HOME</a></li>
-            <li><a th:href="@{/}">DESSERT MENU</a></li>
+            <li><a th:href="@{/homePage}">HOME</a></li>
+            <li><a th:href="@{/homelogin}">DESSERT MENU</a></li>
           </ul>
         </nav>
         <div class="icons">
@@ -162,46 +162,30 @@
     </div>
   </header>
 
-  <div class="container">
-    <div class="receipt">
-      <h2 class="receipt-title">Order Receipt</h2>
-      <div class="receipt-details">
-        <div class="left">Product:</div>
-        <div class="right" id="product"></div>
-      </div>
-      <div class="receipt-details">
-        <div class="left">Price:</div>
-        <div class="right" id="price"></div>
-      </div>
-      <div class="receipt-details">
-        <div class="left">Order Status:</div>
-        <div class="right" id="orderStatus"></div>
-      </div>
-      <div class="receipt-details">
-        <div class="left">Order Date:</div>
-        <div class="right" id="orderDate"></div>
-      </div>
-      <div class="receipt-total">
-        <div class="left">Total Price:</div>
-        <div class="right" id="totalPrice"></div>
-      </div>
-    </div>
-  </div>
+  <div class="order-details-section">
+    <h2>Order Information</h2>
+    <p>Order ID: <span th:text="${order_id}"></span></p>
+    <p>Menu Order: <span th:text="${menu_order}"></span></p>
+    <p>Total Price: <span th:text="'RM ' + ${total_price}"></span></p>
+    <p>Order Date: <span th:text="${order_date}"></span></p>
+</div>
 
-  <script>
-    // Get the query parameters from the URL
-    var queryParams = new URLSearchParams(window.location.search);
-    var product = queryParams.get("product");
-    var price = queryParams.get("price");
-    var orderStatus = queryParams.get("orderStatus");
-    var orderDate = queryParams.get("orderDate");
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  // Get the order details from the model
+  var order_id = /*[(${order_id})]*/ null;
+  var menu_order = /*[(${menu_order})]*/ null;
+  var total_price = /*[(${total_price})]*/ null;
+  var order_date = /*[(${order_date})]*/ null;
 
-    // Populate the receipt with the query parameter values
-    document.getElementById("product").textContent = product;
-    document.getElementById("price").textContent = price;
-    document.getElementById("orderStatus").textContent = orderStatus;
-    document.getElementById("orderDate").textContent = orderDate;
-    document.getElementById("totalPrice").textContent = price; // You can calculate the total price if needed
-  </script>
+  // Populate the receipt with the model attribute values
+  document.getElementById("order_id").textContent = order_id;
+  document.getElementById("menu_order").textContent = menu_order;
+  document.getElementById("total_price").textContent = total_price;
+  document.getElementById("order_date").textContent = order_date;
+  /*]]>*/
+</script>
+
+
 </body>
 </html>

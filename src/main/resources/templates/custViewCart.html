@@ -144,21 +144,21 @@
 
 <div class="cart-container" id="cartContainer">
   <h2>Your Cart</h2>
-  <form th:action="@{/custPayment}" method="post" id="checkoutForm">
+  <form th:action="@{/makePayment}" method="post" id="checkoutForm">
     <div id="cartItems">
-      <!-- Generate cart items dynamically -->
-      
-      <div th:each="cartItem : ${cartItems}" class="cart-item">
-        <input type="checkbox" name="cartItem" th:value="${cartItem.menu_id}" />
-        <span th:text="${cartItem.menu_name} + ' - RM ' + ${cartItem.price}"></span>
-        <!-- Replace the onclick attribute value in the delete icon -->
-        <i class="fas fa-trash-alt" onclick="removeCartItem('${cartItem.menu_id}')"></i>
+        <!-- Generate cart items dynamically -->
 
-      </div>
+        <div th:each="cartItem : ${cartItems}" class="cart-item">
+            <input type="checkbox" name="cartItem" th:value="${cartItem.menu_id}" />
+            <span th:text="${cartItem.menu_name} + ' - RM ' + ${cartItem.price}"></span>
+            <!-- Replace the onclick attribute value in the delete icon -->
+            <i class="fas fa-trash-alt" onclick="removeCartItem('${cartItem.menu_id}')"></i>
+
+        </div>
     </div>
 
     <button type="submit" class="checkout-button">Checkout</button>
-  </form>
+</form>
 
   <div class="total-price">
     Total Price: <span id="totalPrice">RM 0.00</span>

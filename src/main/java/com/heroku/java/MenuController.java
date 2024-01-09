@@ -228,7 +228,7 @@ public class MenuController {
                 menus.add(menu);
             }
             model.addAttribute("menus", menus);
-            return "cake";
+            return "cupcake";
         } catch (SQLException sqe) {
             sqe.printStackTrace();
             return "error";
@@ -270,8 +270,8 @@ public String custViewCart(HttpSession session, @RequestParam("menuId") String[]
 }
 
 
-    // Get menu item by ID from the database
-    private Menu getMenuById(String menuId) {
+     // Get menu item by ID from the database
+     private Menu getMenuById(String menuId) {
         try (Connection connection = dataSource.getConnection()) {
             String sql = "SELECT * FROM menu WHERE menu_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -303,7 +303,7 @@ public String removeCartItem(@RequestParam("menuId") String menuId, HttpSession 
 }
 
 
-@PostMapping("/custPayment")
+@PostMapping("/makePayment")
 public String makePayment(HttpSession session, Model model) {
     // Retrieve cart items from the session
     ArrayList<Menu> cartItems = (ArrayList<Menu>) session.getAttribute("cartItems");
@@ -329,10 +329,9 @@ public String makePayment(HttpSession session, Model model) {
     // Clear the cartItems from the session after successful payment
     session.removeAttribute("cartItems");
 
-    // Return the view name for custPayment.html
-    return "custPayment";
+    // Return the view name for makePayment.html
+    return "makePayment";
 }
-
 
 
 }

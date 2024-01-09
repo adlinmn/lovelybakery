@@ -315,6 +315,59 @@ input[type="button"] {
       document.getElementById("address").readOnly = false;
       document.getElementById("password").readOnly = false;
     }
+
+    function showUpdateSuccess() {
+  // Create a visually appealing popup container
+  const popupContainer = document.createElement("div");
+  popupContainer.classList.add("popup-container");
+
+  // Add message and close button
+  popupContainer.innerHTML = `
+    <div class="popup-message">Account information updated successfully!</div>
+    <div class="popup-buttons">
+      <button class="close-button">Close</button>
+    </div>
+  `;
+
+  // Append the popup to the body
+  document.body.appendChild(popupContainer);
+
+  // Handle close button click
+  popupContainer.querySelector(".close-button").addEventListener("click", function () {
+    popupContainer.remove();
+  });
+}
+  // Update the form submission logic to call the showUpdateSuccess function
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("updateForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+ 
+// Prevent the default form submission
+
+    // Perform the form submission logic here:
+    const formData = new FormData(this); // Create a FormData object from the form
+
+    // Replace this placeholder with your actual AJAX request
+    fetch("/updateAcc", {
+      method: "POST",
+      body: formData
+    })
+      .then(response => {
+        if (response.ok) {
+          // Handle successful submission
+          showUpdateSuccess();
+        } else {
+          // Handle errors
+          console.error("Error updating account:", response.statusText);
+          // Display an error message to the user
+        }
+      })
+      .catch(error => {
+        console.error("Error during submission:", error);
+        // Display an error message to the user
+      });
+  });
+});
   </script>
 
   </body>

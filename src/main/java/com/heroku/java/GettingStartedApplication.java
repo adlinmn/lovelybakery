@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -116,15 +119,26 @@ public class GettingStartedApplication {
         return "custPayment";
     }
 
-    @GetMapping("custViewOrder")
-    public String custViewOrder() {
-        return "custViewOrder";
-    }
 
     @GetMapping("makePayment")
     public String makePayment() {
-        return "makePayment";
+       return "makePayment";
     }
+
+
+    //@GetMapping("/makePayment")
+//public String loadMakePaymentPage(Model model, HttpSession session) {
+    // Retrieve cart items and total price from the session
+   // ArrayList<Menu> cartItems = (ArrayList<Menu>) session.getAttribute("cartItems");
+    //float totalPrice = (float) session.getAttribute("totalPrice");
+
+    // Add the retrieved data to the model
+    //model.addAttribute("cartItems", cartItems);
+   // model.addAttribute("totalPrice", totalPrice);
+
+   // return "makePayment";
+//}
+    
 
     @GetMapping("deleteMenu")
     public String deleteMenu() {

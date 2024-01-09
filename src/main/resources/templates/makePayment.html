@@ -102,6 +102,69 @@
       margin-top: 20px;
       text-align: right;
     }
+    .payment-section {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+min-height: calc(100vh - 60px); /* Subtracting header height */
+padding-top: 20px;
+}
+.payment-title {
+font-size: 36px;
+margin-bottom: 20px;
+color: #ffc0cb;
+text-align: center;
+text-shadow: 1px 1px 2px #fff;
+}
+.frame {
+width: 300px;
+height: 300px;
+background-color: #ffffff;
+border: 5px solid #ffc0cb;
+margin-bottom: 20px;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.frame img {
+max-width: 100%;
+max-height: 100%;
+}
+.upload-btn {
+background-color: #ffc0cb;
+color: #fff;
+font-size: 18px;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+.upload-btn:hover {
+background-color: #ffa3c8;
+}
+.popup {
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: #fff;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+display: none;
+}
+.popup-message {
+font-size: 24px;
+text-align: center;
+margin-bottom: 20px;
+}
+.popup-buttons {
+text-align: center;
+}
+.popup-buttons button {
+margin: 10px;
+}
   </style>
 </head>
 <body>
@@ -124,13 +187,37 @@
     </div>
   </div>
 </header>
+<div class="payment-section">
+  <h1 class="payment-title">Scan the QR Code and Complete Your Payment</h1>
+  <div class="frame">
+    <img src="img/qr-code.png" alt="QR Code">
+  </div>
+  <input type="file" id="fileInput" style="display: none;">
+  <button class="upload-btn" onclick="chooseFile()">Upload Receipt</button>
+</div>
+<div class="popup" id="uploadDialog">
+  <p class="popup-message">Confirm Payment?</p>
+  <div class="popup-buttons">
+    <button class="btn btn-primary" onclick="showSuccessDialog()">Confirm</button>
+    <button class="btn btn-secondary" onclick="hideUploadDialog()">Cancel</button>
+  </div>
+</div>
 
+<div class="popup" id="successDialog">
+  <p class="popup-message">Payment Successful!</p>
+</div>
 <div class="receipt-container">
   <h2>Order Receipt</h2>
-  <div id="receiptItems"></div>
+  
+  <!-- Display cart items dynamically -->
+  <div id="receiptItems">
+    <div th:each="cartItem : ${cartItems}" class="receipt-item">
+      <span th:text="${cartItem.menu_name} + ' - RM ' + ${cartItem.price}"></span>
+    </div>
+  </div>
 
   <div class="total-price">
-    Total Price: <span id="totalPrice">RM 0.00</span>
+    Total Price: <span id="totalPrice" th:text="'RM ' + ${totalPrice}"></span>
   </div>
 
   <div class="action-buttons">
@@ -140,11 +227,12 @@
 </div>
 
 <script th:inline="javascript">
+  /*<![CDATA[*/
   const receiptItemsContainer = document.getElementById('receiptItems');
   const totalPriceElement = document.getElementById('totalPrice');
 
-  // Retrieve cart items from localStorage
-  const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+  // Retrieve cart items from the server-side model attribute
+  const cartItems = /*[[${cartItems}]]*/ [];
 
   // Function to render the receipt items
   function renderReceiptItems() {
@@ -155,7 +243,7 @@
       receiptItem.classList.add('receipt-item');
 
       const span = document.createElement('span');
-      span.textContent = `${item.name} - RM ${parseFloat(item.price.slice(2)).toFixed(2)}`;
+      span.textContent = `${item.menu_name} - RM ${item.price.toFixed(2)}`;
       receiptItem.appendChild(span);
 
       receiptItemsContainer.appendChild(receiptItem);
@@ -163,7 +251,7 @@
 
     // Calculate and display the total price
     const totalPrice = cartItems.reduce((total, item) => {
-      return total + parseFloat(item.price.slice(2));
+      return total + item.price;
     }, 0);
     totalPriceElement.textContent = `RM ${totalPrice.toFixed(2)}`;
   }
@@ -171,15 +259,36 @@
   renderReceiptItems();
 
   function cancelOrder() {
-    localStorage.removeItem('cartItems');
-    window.location.href = /*[[@{/custViewCart}]]*/ '/custViewCart'; // Update the page URL
+    window.location.href = '/custViewCart'; // Update the page URL
   }
 
   function makePayment() {
-    // Add your payment logic here
+    // Your payment logic goes here
     console.log('Payment made');
-    window.location.href = /*[[@{/custPayment}]]*/ '/custPayment';// Update the page URL
+    window.location.href = '/custViewOrder'; // Update the page URL
   }
+  /*]]>*/
+  function chooseFile() {
+      document.getElementById("fileInput").click();
+    }
+  
+    function showUploadDialog() {
+      document.getElementById("uploadDialog").style.display = "block";
+    }
+  
+    function hideUploadDialog() {
+      document.getElementById("uploadDialog").style.display = "none";
+    }
+  
+    function showSuccessDialog() {
+      document.getElementById("uploadDialog").style.display = "none";
+      document.getElementById("successDialog").style.display = "block";
+    }
+  
+    document.getElementById("fileInput").addEventListener("change", function() {
+      showUploadDialog();
+    });
 </script>
+
 </body>
 </html>

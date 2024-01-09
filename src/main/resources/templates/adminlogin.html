@@ -4,6 +4,7 @@
   <title>Admin Login</title>
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
 </head>
 <style>
   header .nav-container {
@@ -139,7 +140,7 @@
   </div>
 </header>
 <div class="container">
-  <form th:action="@{/adminlogin}" method="post">
+  <form th:action="@{/adminlogin}" method="post" onsubmit="showLoginStatus(true)">
     <div class="profile-icon">
       <i class="fas fa-user"></i>
     </div>
@@ -155,5 +156,17 @@
     </div>
   </form>
 </div>
+
+<script>
+  function showLoginStatus(isSuccessful) {
+    if (isSuccessful) {
+      alert("Logged in successfully!");
+      // Redirect to loginHomeAdmin.html after successful login
+      window.location.href = "loginHomeAdmin.html";
+    } else {
+      alert("Login failed. Please check your credentials and try again.");
+    }
+  }
+</script>
 </body>
 </html>
