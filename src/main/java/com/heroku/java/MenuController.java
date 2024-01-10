@@ -23,6 +23,7 @@ import java.util.UUID;
 @Controller
 public class MenuController {
     private final DataSource dataSource;
+    private Object orders;
 
     @Autowired
     public MenuController(DataSource dataSource) {
@@ -328,10 +329,11 @@ public String makePayment(HttpSession session, Model model) {
     model.addAttribute("totalPrice", totalPrice);
     
     // You can perform additional payment processing logic here if needed
-    
+    session.setAttribute("order", orders);
 
     // Clear the cartItems from the session after successful payment
     session.removeAttribute("cartItems");
+    
 
     // Return the view name for makePayment.html
     return "makePayment";

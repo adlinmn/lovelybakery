@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -30,12 +32,11 @@ public class OrderController {
     }
 
     @GetMapping("/custViewOrder")
-public String showCustViewOrderPage(Model model, @RequestParam("order_id") int orderId, @RequestParam("menu_order") ArrayList<Menu> menuOrder, @RequestParam("total_price") float totalPrice, @RequestParam("order_date") long orderDateTimestamp) {
+public String showCustViewOrderPage(Model model, @ModelAttribute("menuOrder") @RequestBody ArrayList<Menu> menuOrder, @RequestParam("total_price") float totalPrice, @RequestParam("order_date") long orderDateTimestamp) {
 
     // Convert timestamp to Date
     Date orderDate = new Date(orderDateTimestamp);
 
-    model.addAttribute("order_id", orderId);
     model.addAttribute("menu_order", menuOrder);
     model.addAttribute("total_price", totalPrice);
     model.addAttribute("order_date", orderDate);
@@ -47,10 +48,9 @@ public String showCustViewOrderPage(Model model, @RequestParam("order_id") int o
         Order orders = new Order(sql, menuOrder, totalPrice, orderDate); // Assuming you have a default constructor for the Order class
 
         // Assuming getOrder_id(), getOrder_date(), getTotal_price(), and getMenuOrder() are methods in the Order class
-        statement.setInt(1, orders.getOrder_id());
-        statement.setTimestamp(2, new java.sql.Timestamp(orderDate.getTime()));
-        statement.setFloat(3, orders.getTotal_price());
-        statement.setString(4, orders.getMenuOrder());
+        statement.setTimestamp(1, new java.sql.Timestamp(orderDate.getTime()));
+        statement.setFloat(2, orders.getTotal_price());
+        statement.setString(3, orders.getMenuOrder());
 
         statement.executeUpdate();
 

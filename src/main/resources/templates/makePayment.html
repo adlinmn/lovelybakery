@@ -221,6 +221,9 @@ margin: 10px;
     Total Price: <span id="totalPrice" th:text="'RM ' + ${totalPrice}"></span>
   </div>
 
+  <input type="hidden" th:attr="value=${cartItems}" name="cartItems"/>
+  <input type="hidden" th:value="${totalPrice}" name="total_price"/>
+
   <div class="action-buttons">
     <button class="cancel-button" type="reset" onclick="cancelOrder()">Cancel Order</button>
     <button class="create-order-button" type="submit" onclick="createOrder()">Create Order</button>
