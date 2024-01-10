@@ -41,7 +41,7 @@ public String showCustViewOrderPage(Model model, @RequestParam("order_id") int o
     model.addAttribute("order_date", orderDate);
 
     try (Connection connection = dataSource.getConnection()) {
-        String sql = "INSERT INTO orders (order_date, total_price, menu_order) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO orders (order_date, total_price, menu_order) VALUES (?,?,?)";
         PreparedStatement statement = connection.prepareStatement(sql);
 
         Order orders = new Order(sql, menuOrder, totalPrice, orderDate); // Assuming you have a default constructor for the Order class
