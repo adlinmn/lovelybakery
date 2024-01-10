@@ -328,6 +328,7 @@ public String makePayment(HttpSession session, Model model) {
     model.addAttribute("totalPrice", totalPrice);
     
     // You can perform additional payment processing logic here if needed
+    
 
     // Clear the cartItems from the session after successful payment
     session.removeAttribute("cartItems");
@@ -335,6 +336,7 @@ public String makePayment(HttpSession session, Model model) {
     // Return the view name for makePayment.html
     return "makePayment";
 }
+
 
 
 

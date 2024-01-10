@@ -163,11 +163,13 @@
   </header>
 
   <div class="order-details-section">
+    <form method="post" th:action="@{/createOrder}">
     <h2>Order Information</h2>
     <p>Order ID: <span th:text="${order_id}"></span></p>
     <p>Menu Order: <span th:text="${menu_order}"></span></p>
     <p>Total Price: <span th:text="'RM ' + ${total_price}"></span></p>
     <p>Order Date: <span th:text="${order_date}"></span></p>
+  </form>
 </div>
 
 <script th:inline="javascript">
