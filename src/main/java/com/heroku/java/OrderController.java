@@ -8,54 +8,64 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.sql.DataSource;
 import java.util.Date;
+import java.util.List;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSession;
 
 @Controller
 public class OrderController {
      private DataSource dataSource;
+     private JdbcTemplate jdbcTemplate;
+
 
     @Autowired
     public OrderController(DataSource dataSource) {
         this.dataSource = dataSource;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    @GetMapping("/custViewOrder")
-public String showCustViewOrderPage(Model model, @ModelAttribute("menuOrder") @RequestBody ArrayList<Menu> menuOrder, @RequestParam("total_price") float totalPrice, @RequestParam("order_date") long orderDateTimestamp) {
-
-    // Convert timestamp to Date
-    Date orderDate = new Date(orderDateTimestamp);
-
-    model.addAttribute("menu_order", menuOrder);
-    model.addAttribute("total_price", totalPrice);
-    model.addAttribute("order_date", orderDate);
+    @PostMapping("/custViewOrder")
+public String showCustViewOrderPage(Model model, @RequestParam("order_list") String orderList) {
+    Date orderDate = new Date();
 
     try (Connection connection = dataSource.getConnection()) {
-        String sql = "INSERT INTO orders (order_date, total_price, menu_order) VALUES (?,?,?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
+        String sql = "INSERT INTO orders (order_date, order_list) VALUES (?, ?)";
+        PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-        Order orders = new Order(sql, menuOrder, totalPrice, orderDate); // Assuming you have a default constructor for the Order class
-
-        // Assuming getOrder_id(), getOrder_date(), getTotal_price(), and getMenuOrder() are methods in the Order class
         statement.setTimestamp(1, new java.sql.Timestamp(orderDate.getTime()));
-        statement.setFloat(2, orders.getTotal_price());
-        statement.setString(3, orders.getMenuOrder());
+        statement.setString(2, orderList);
 
-        statement.executeUpdate();
+        int affectedRows = statement.executeUpdate();
 
-        connection.close();
-        return "redirect:/custViewOrder";
+        if (affectedRows > 0) {
+            // Retrieve the last inserted order_id
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                String orderId = generatedKeys.getString(1);
+
+                model.addAttribute("order_id", orderId);
+                model.addAttribute("order_date", orderDate);
+                model.addAttribute("order_list", orderList);
+
+                connection.close();
+                return "custViewOrder";
+            }
+        }
+        return "redirect:/";
     } catch (SQLException sqe) {
         sqe.printStackTrace();
         return "redirect:/";
@@ -65,38 +75,54 @@ public String showCustViewOrderPage(Model model, @ModelAttribute("menuOrder") @R
     }
 }
 
-@PostMapping("/createOrder")
-public String createOrder(HttpSession session, Model model) {
-    // Retrieve cart items from the session
-    ArrayList<Menu> cartItems = (ArrayList<Menu>) session.getAttribute("cartItems");
 
-    if (cartItems == null || cartItems.isEmpty()) {
-        // Handle the case where the cart is empty (no items selected)
-        // You might want to redirect the user to the cart view or show an error message
-        return "redirect:/custViewOrder";
+    @GetMapping("/AdminViewOrder")
+    public String showAdminViewOrder(Model model) {
+        List<Order> orders = new ArrayList<>();
+        try (Connection con = dataSource.getConnection()) {
+        String sql = "SELECT * FROM orders";
+        PreparedStatement statement = con.prepareStatement(sql);
+        ResultSet rs = statement.executeQuery();
+
+        while (rs.next()) {
+            String order_id = rs.getString("order_id");
+            Date order_date = rs.getDate("order_date");
+            String order_list = rs.getString("order_list");
+
+            Order order = new Order(order_id, order_date, order_list);
+            orders.add(order);
+        }
+
+        model.addAttribute("orders", orders);  // Add orders to the model
+        return "AdminViewOrder";
+    } catch (SQLException sqe) {
+        sqe.printStackTrace();
+        return "error";
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "error";
+    }
+}
+
+    @PostMapping("/deleteOrder")
+    public String deleteOrder(@RequestParam("orderId") String orderId) {
+        try (Connection connection = dataSource.getConnection()) {
+            String sql = "DELETE FROM orders WHERE order_id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, orderId);
+            statement.executeUpdate();
+            connection.close();
+            return "redirect:/AdminViewOrder";
+        } catch (SQLException sqe) {
+            sqe.printStackTrace();
+            return "error";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
     }
 
-    // Calculate the total price of selected menu items
-    float totalPrice = 0;
-    for (Menu cartItem : cartItems) {
-        totalPrice += cartItem.getPrice();
-    }
 
-    // Pass the cart items and total price to the view
-    model.addAttribute("cartItems", cartItems);
-    model.addAttribute("totalPrice", totalPrice);
-    
-    // You can perform additional payment processing logic here if needed
-
-    // Clear the cartItems from the session after successful payment
-    session.removeAttribute("cartItems");
-
-    // Return the view name for makePayment.html
-    return "custViewOrder";
 }
 
 
-
-
-
-}

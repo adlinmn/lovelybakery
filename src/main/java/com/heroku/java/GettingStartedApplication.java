@@ -103,11 +103,6 @@ public class GettingStartedApplication {
         return "adminQR";
     }
 
-    @GetMapping("AdminViewOrder")
-    public String AdminViewOrder() {
-        return "AdminViewOrder";
-    }
-
 
     @GetMapping("createQR")
     public String createQR() {
@@ -123,6 +118,11 @@ public class GettingStartedApplication {
     @GetMapping("makePayment")
     public String makePayment() {
        return "makePayment";
+    }
+
+    @GetMapping("custViewOrder")
+    public String custViewOrder() {
+       return "custViewOrder";
     }
 
 

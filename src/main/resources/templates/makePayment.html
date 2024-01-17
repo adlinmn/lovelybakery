@@ -165,6 +165,11 @@ text-align: center;
 .popup-buttons button {
 margin: 10px;
 }
+
+.long-textbox {
+    width: 500px; /* Adjust the width as needed */
+}
+
   </style>
 </head>
 <body>
@@ -210,8 +215,9 @@ margin: 10px;
   <h2>Order Receipt</h2>
   
   <!-- Display cart items dynamically -->
+  <form id="createOrderForm"  th:action="@{/custViewOrder}" method="post">
   <div id="receiptItems">
-    <form id="createOrderForm"  th:action="@{/createOrder}" method="post">
+   
     <div th:each="cartItem : ${cartItems}" class="receipt-item">
       <span th:text="${cartItem.menu_name} + ' - RM ' + ${cartItem.price}"></span>
     </div>
@@ -224,9 +230,11 @@ margin: 10px;
   <input type="hidden" th:attr="value=${cartItems}" name="cartItems"/>
   <input type="hidden" th:value="${totalPrice}" name="total_price"/>
 
+  <input type="text" class="long-textbox" placeholder="Type Your Order List & Total Price, just copy paste from the information above" name="order_list" required>
+
   <div class="action-buttons">
     <button class="cancel-button" type="reset" onclick="cancelOrder()">Cancel Order</button>
-    <button class="create-order-button" type="submit" onclick="createOrder()">Create Order</button>
+    <button class="create-order-button" type="submit">Create Order</button>
   </div>
   </form>
 </div>
@@ -267,11 +275,11 @@ margin: 10px;
     window.location.href = '/custViewCart'; // Update the page URL
   }
 
-  function createOrder() {
-    // Your payment logic goes here
-    console.log('Payment made');
-    window.location.href = '/custViewOrder'; // Update the page URL
-  }
+  // function createOrder() {
+  //   // Your payment logic goes here
+  //   console.log('Payment made');
+  //   window.location.href = '/custViewOrder'; // Update the page URL
+  // }
   /*]]>*/
   function chooseFile() {
       document.getElementById("fileInput").click();

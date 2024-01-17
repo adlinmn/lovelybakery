@@ -151,8 +151,8 @@
       <div class="nav-items">
         <nav>
           <ul>
-            <li><a th:href="@{/homePage}">HOME</a></li>
-            <li><a th:href="@{/homelogin}">DESSERT MENU</a></li>
+            <li><a th:href="@{/homelogin}">HOME</a></li>
+            <li><a th:href="@{/cake}">DESSERT MENU</a></li>
           </ul>
         </nav>
         <div class="icons">
@@ -163,12 +163,11 @@
   </header>
 
   <div class="order-details-section">
-    <form method="post" th:action="@{/createOrder}">
+    <form method="post" th:action="@{/custViewOrder}">
     <h2>Order Information</h2>
     <p>Order ID: <span id="order_id" th:text="${order_id}"></span></p>
-    <p>Menu Order: <span id="menu_order" th:text="${menu_order}"></span></p>
-    <p>Total Price: <span id="total_price" th:text="'RM ' + ${total_price}"></span></p>
     <p>Order Date: <span id="order_date" th:text="${order_date}"></span></p>
+    <p>Order Details: <span id="order_list" th:text="${order_list}"></span></p>
   </form>
 </div>
 
@@ -176,15 +175,12 @@
   /*<![CDATA[*/
   // Get the order details from the model
   var order_id = /*[(${order_id})]*/ null;
-  var menu_order = /*[(${menu_order})]*/ null;
-  var total_price = /*[(${total_price})]*/ null;
   var order_date = /*[(${order_date})]*/ null;
+  var order_list = /*[(${order_list})]*/ null;
 
   // Populate the receipt with the model attribute values
-  document.getElementById("order_id").textContent = order_id;
-  document.getElementById("menu_order").textContent = menu_order;
-  document.getElementById("total_price").textContent = total_price;
-  document.getElementById("order_date").textContent = order_date;
+  //document.getElementById("order_id").textContent = order_id;
+ // document.getElementById("order_date").textContent = order_date;
   /*]]>*/
 </script>
 

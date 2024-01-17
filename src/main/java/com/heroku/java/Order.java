@@ -6,17 +6,15 @@ import java.util.Date;
 public class Order {
     private int order_id;
     private Date order_date;
-    private Float total_price;
-    private String menu_order;
+    private String order_list;
 
-    public Order(int order_id, Date order_date, Float total_price, String menu_order) {
+    public Order(int order_id, Date order_date, String order_list) {
         this.order_id = order_id;
         this.order_date = order_date;
-        this.total_price = total_price;
-        this.menu_order = menu_order;
+        this.order_list = order_list;
     }
 
-    public Order(String orderId, ArrayList<Menu> cartItems, float totalPrice, java.util.Date orderDate) {
+    public Order(String orderId, java.util.Date orderDate, String orderList) {
         // Default constructor
     }
 
@@ -37,30 +35,12 @@ public class Order {
         this.order_date = order_date;
     }
 
-    public float getTotal_price() {
-        return total_price;
+    public String getOrder_list() {
+        return order_list;
     }
 
-    public void setTotal_price(Float totalPrice) {
-        this.total_price = totalPrice;
+    public void setOrder_list(String order_list) {
+        this.order_list = order_list;
     }
 
-    public String getMenu_order() {
-        return menu_order;
-    }
-
-    public void setMenu_order(String menu_order) {
-        this.menu_order = menu_order;
-    }
-
-    public String getMenu_Order() {
-        return null;
-    }
-
-    public void addMenu_Order(String menu_Order) {
-    }
-
-    public String getMenuOrder() {
-        return null;
-    }
 }

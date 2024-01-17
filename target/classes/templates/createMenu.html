@@ -278,60 +278,16 @@
 </div>
 
 <script>
-  // Your JavaScript code here
   const overlayButton = document.querySelector(".menu-image-overlay");
-  const form = document.getElementById("menuForm");
-  const confirmationModal = document.getElementById("confirmationModal");
-  const confirmSaveButton = document.getElementById("confirmSaveButton");
-  const cancelButton = document.getElementById("cancelButton");
-  const categorySelection = document.querySelector(".category-selection");
+const form = document.getElementById("menuForm");
+const confirmationModal = document.getElementById("confirmationModal");
+const confirmSaveButton = document.getElementById("confirmSaveButton");
+const cancelButton = document.getElementById("cancelButton");
+const categorySelection = document.querySelector(".category-selection");
 
-  overlayButton.addEventListener("click", () => {
-    // Open file upload dialog here
-    console.log("File upload dialog should open");
-  });
 
-  overlayButton.addEventListener("click", () => {
-    // Simulate file selection process
-    const fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.accept = "image/*";
-    fileInput.addEventListener("change", (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const imageUrl = e.target.result;
-          const menuImage = overlayButton.previousElementSibling;
-          menuImage.src = imageUrl;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-    fileInput.click();
-  });
-
-  categorySelection.addEventListener("change", (event) => {
-    const selectedCategory = event.target.value;
-    console.log("Selected Category:", selectedCategory);
-  });
-
-  function saveMenuToDatabase(form) {
-    // Fetch API or AJAX request to send form data to the server and save to the database
-    // Example using Fetch API
-    const formData = new FormData(form);
-    fetch("save-menu.php", {
-      method: "POST",
-      body: formData
-    })
-      .then(response => response.text())
-      .then(data => {
-        console.log("Menu saved:", data);
-      })
-      .catch(error => {
-        console.error("Error saving menu:", error);
-      });
-  }
 </script>
+
+</body>
 </body>
 </html>

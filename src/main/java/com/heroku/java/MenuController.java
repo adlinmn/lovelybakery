@@ -44,6 +44,7 @@ public class MenuController {
             statement.executeUpdate();
 
             connection.close();
+            System.out.println("Menu created successfully!");
             return "redirect:/viewMenuAdmin";
         } catch (SQLException sqe) {
             sqe.printStackTrace();
@@ -338,6 +339,8 @@ public String makePayment(HttpSession session, Model model) {
     // Return the view name for makePayment.html
     return "makePayment";
 }
+
+
 
 
 
