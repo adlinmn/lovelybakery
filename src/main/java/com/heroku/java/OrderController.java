@@ -43,29 +43,25 @@ public String showCustViewOrderPage(Model model, @RequestParam("order_list") Str
     Date orderDate = new Date();
 
     try (Connection connection = dataSource.getConnection()) {
-        String sql = "INSERT INTO orders (order_date, order_list) VALUES (?, ?)";
-        PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        String sql = "INSERT INTO orders (order_date, order_list) VALUES (?, ?) RETURNING order_id";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setTimestamp(1, new java.sql.Timestamp(orderDate.getTime()));
+            statement.setString(2, orderList);
 
-        statement.setTimestamp(1, new java.sql.Timestamp(orderDate.getTime()));
-        statement.setString(2, orderList);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String orderId = resultSet.getString("order_id");
 
-        int affectedRows = statement.executeUpdate();
+                    model.addAttribute("order_id", orderId);
+                    model.addAttribute("order_date", orderDate);
+                    model.addAttribute("order_list", orderList);
 
-        if (affectedRows > 0) {
-            // Retrieve the last inserted order_id
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                String orderId = generatedKeys.getString(1);
-
-                model.addAttribute("order_id", orderId);
-                model.addAttribute("order_date", orderDate);
-                model.addAttribute("order_list", orderList);
-
-                connection.close();
-                return "custViewOrder";
+                    return "custViewOrder";
+                } else {
+                    return "redirect:/";
+                }
             }
         }
-        return "redirect:/";
     } catch (SQLException sqe) {
         sqe.printStackTrace();
         return "redirect:/";
@@ -76,6 +72,7 @@ public String showCustViewOrderPage(Model model, @RequestParam("order_list") Str
 }
 
 
+
     @GetMapping("/AdminViewOrder")
     public String showAdminViewOrder(Model model) {
         List<Order> orders = new ArrayList<>();
@@ -83,12 +80,12 @@ public String showCustViewOrderPage(Model model, @RequestParam("order_list") Str
         String sql = "SELECT * FROM orders";
         PreparedStatement statement = con.prepareStatement(sql);
         ResultSet rs = statement.executeQuery();
+        System.out.println("connected");
 
         while (rs.next()) {
-            String order_id = rs.getString("order_id");
+            int order_id = rs.getInt("order_id");
             Date order_date = rs.getDate("order_date");
             String order_list = rs.getString("order_list");
-
             Order order = new Order(order_id, order_date, order_list);
             orders.add(order);
         }
@@ -105,11 +102,11 @@ public String showCustViewOrderPage(Model model, @RequestParam("order_list") Str
 }
 
     @PostMapping("/deleteOrder")
-    public String deleteOrder(@RequestParam("orderId") String orderId) {
+    public String deleteOrder(@RequestParam("orderId") int orderId) {
         try (Connection connection = dataSource.getConnection()) {
             String sql = "DELETE FROM orders WHERE order_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, orderId);
+            statement.setInt(1, orderId);
             statement.executeUpdate();
             connection.close();
             return "redirect:/AdminViewOrder";
