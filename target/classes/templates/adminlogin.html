@@ -140,7 +140,7 @@
   </div>
 </header>
 <div class="container">
-  <form th:action="@{/adminlogin}" method="post" onsubmit="showLoginStatus(true)">
+  <form th:action="@{/adminlogin}" method="post">
     <div class="profile-icon">
       <i class="fas fa-user"></i>
     </div>
@@ -151,20 +151,22 @@
     <input type="email" id="email" name="email" placeholder="Enter your email">
     <label for="password">Password</label>
     <input type="password" id="password" name="password" placeholder="Enter your password">
-    <div class="centered-button">
-      <input type="submit" value="Login">
-    </div>
+    <button type="submit" onclick="showConfirmation()">Login</button>
   </form>
 </div>
 
 <script>
-  function showLoginStatus(isSuccessful) {
-    if (isSuccessful) {
-      alert("Logged in successfully!");
-      // Redirect to loginHomeAdmin.html after successful login
-      window.location.href = "loginHomeAdmin.html";
+  function showConfirmation() {
+    var id = document.getElementById("id").value;
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+
+    if (id && email && password) {
+      alert("Login successfully!");
+      return true;
     } else {
-      alert("Login failed. Please check your credentials and try again.");
+      alert("Please fill in all the required fields!");
+      return false;
     }
   }
 </script>

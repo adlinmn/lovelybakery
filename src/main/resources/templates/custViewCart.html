@@ -237,6 +237,18 @@
     totalPriceElement.textContent = `RM ${totalPrice.toFixed(2)}`;
   }
 
+  checkoutForm.addEventListener('submit', function(event) {
+    const checkboxes = document.querySelectorAll('input[name="cartItem"]');
+    const atLeastOneChecked = Array.prototype.some.call(checkboxes, function(checkbox) {
+      return checkbox.checked;
+    });
+
+    if (!atLeastOneChecked) {
+      event.preventDefault();
+      alert("Please click your item first!");
+    }
+  });
+
   renderCartItems();
 
   /*]]>*/

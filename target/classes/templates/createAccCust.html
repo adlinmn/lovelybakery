@@ -36,7 +36,7 @@
         <label for="password">Password</label>
         <input type="password" id="password" name="password" placeholder="Enter your password" required>
         <label for="address">Address</label>
-        <textarea id="address" name="address" placeholder="Enter your address"></textarea>
+        <textarea id="address" name="address" placeholder="Enter your address" required></textarea>
         <input type="submit" value="Sign Up" onclick="showConfirmation()">
       </form>
       <p>Already Registered? <a th:href="@{/userlogin}">Login</a></p>
@@ -44,7 +44,18 @@
 
     <script>
       function showConfirmation() {
-        alert("Account created successfully!");
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        var address = document.getElementById("address").value;
+
+        if (name && email && password && address) {
+          alert("Account created successfully!");
+          return true;
+        } else {
+          alert("Please fill in all the required fields!");
+          return false;
+        }
       }
     </script>
   </body>
